@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0077C8">
+<link rel="icon" href="data:image/png;base64,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">
+<title>1AV Password Reset Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout: white header with the 1AV logo, then one white form sheet on the palette's pale blue. Single light look, 1AV palette only. */
+  :root {
+    color-scheme: light;
+    --blue: #0077C8;
+    --sky: #00A9E0;
+    --mist: #CAE2E7;
+    --navy: #005687;
+    --light: #52CAF5;
+    --deep: #0060A7;
+    --white: #FFFFFF;
+    --font: "Noto Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--mist);
+    color: var(--navy);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Header */
+  .top { background: var(--white); padding-inline: 16px; }
+  .top-in {
+    max-width: 640px;
+    margin-inline: auto;
+    padding-block: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .brand img { height: 36px; width: auto; display: block; }
+  .brand span { font-weight: 600; font-size: 0.95rem; padding-left: 12px; border-left: 1px solid var(--mist); }
+  .lang { display: flex; flex: none; border: 1px solid var(--deep); border-radius: 8px; overflow: hidden; }
+  .lang button {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 0;
+    background: var(--white);
+    color: var(--deep);
+    cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { background: var(--deep); color: var(--white); }
+
+  /* Sheet */
+  .wrap { padding-inline: 16px; padding-block: clamp(16px, 4vw, 40px); }
+  .sheet {
+    max-width: 640px;
+    margin-inline: auto;
+    background: var(--white);
+    border-radius: 12px;
+    padding: clamp(24px, 5vw, 44px);
+  }
+  h1 { margin: 0; font-size: clamp(1.4rem, 4vw, 1.75rem); font-weight: 700; line-height: 1.25; text-wrap: balance; }
+  .intro { margin: 10px 0 0; }
+  .required-note { margin: 6px 0 0; font-size: 0.9rem; }
+  .preview-note { margin: 16px 0 0; padding: 10px 14px; background: var(--mist); border-radius: 6px; font-size: 0.88rem; }
+
+  form { margin-top: 28px; display: flex; flex-direction: column; gap: 22px; }
+  .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .field > label { font-weight: 600; }
+  .hint { font-size: 0.88rem; }
+  .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field textarea {
+    width: 100%;
+    margin-top: 4px;
+    font: inherit;
+    color: var(--navy);
+    background: var(--white);
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    min-height: 48px;
+    padding: 12px 14px;
+    transition: box-shadow 0.15s;
+  }
+  .field input:hover, .field textarea:hover { box-shadow: 0 0 0 3px var(--mist); }
+  .field textarea { resize: vertical; min-height: 88px; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 3px solid var(--light);
+    outline-offset: 2px;
+  }
+  .field.invalid input[type="text"], .field.invalid input[type="tel"], .field.invalid input[type="email"], .field.invalid textarea {
+    border: 2px solid var(--navy);
+  }
+  .error { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; margin-top: 4px; font-size: 0.9rem; font-weight: 600; }
+  .error::before {
+    content: "!";
+    width: 20px; height: 20px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .field > .check { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-weight: 400; }
+  .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--blue); }
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .send-error { margin: 0; padding: 12px 14px; background: var(--mist); border: 2px solid var(--navy); border-radius: 6px; font-weight: 600; }
+
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    border: 0;
+    border-radius: 8px;
+    min-height: 48px;
+    padding: 12px 28px;
+    transition: background-color 0.15s;
+    cursor: pointer;
+    background: var(--blue);
+    color: var(--white);
+  }
+  .btn:hover { background: var(--deep); }
+  .btn[disabled] { background: var(--deep); cursor: progress; }
+  .btn.secondary { background: var(--white); color: var(--deep); border: 1px solid var(--deep); }
+  .btn.secondary:hover { background: var(--mist); }
+  .actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .actions small { font-size: 0.88rem; }
+
+  .safety { margin: 28px 0 0; padding-top: 18px; border-top: 1px solid var(--mist); font-size: 0.9rem; }
+
+  /* Confirmation */
+  .tick { width: 56px; height: 56px; border-radius: 50%; background: var(--blue); display: grid; place-items: center; margin-bottom: 18px; }
+  .tick::after { content: ""; width: 13px; height: 25px; border: solid var(--white); border-width: 0 4px 4px 0; transform: translateY(-3px) rotate(45deg); }
+  .done h1:focus { outline: none; }
+  .done p { margin: 12px 0 0; }
+  .ref { margin-top: 24px; padding: 16px 18px; background: var(--mist); border-radius: 6px; }
+  .ref .ref-label { display: block; font-size: 0.88rem; font-weight: 600; }
+  .ref code { display: block; margin-top: 2px; font-family: var(--font); font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em; user-select: all; }
+  .ref .ref-keep { display: block; margin-top: 4px; font-size: 0.88rem; }
+  .summary { margin: 24px 0 0; display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr); border-top: 1px solid var(--mist); }
+  .summary dt, .summary dd { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--mist); font-size: 0.95rem; overflow-wrap: anywhere; }
+  .summary dt { font-weight: 600; padding-right: 12px; }
+  .done .actions { margin-top: 28px; }
+
+  .foot { max-width: 640px; margin: 16px auto 0; font-size: 0.82rem; text-align: center; }
+
+  @media (max-width: 560px) {
+    body { background: var(--white); }
+    .top { border-bottom: 1px solid var(--mist); }
+    .wrap { padding-inline: 0; padding-block: 0; }
+    .sheet { border-radius: 0; padding: 24px 20px 28px; }
+    .foot { margin: 0; padding: 16px 20px 24px; border-top: 1px solid var(--mist); }
+  }
+  @media (max-width: 380px) { .brand span { display: none; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (max-width: 520px) {
+    .summary { grid-template-columns: minmax(0, 1fr); }
+    .summary dt { border-bottom: 0; padding-bottom: 0; }
+    .summary dd { padding-top: 2px; }
+    .btn { width: 100%; }
+    .actions { align-items: stretch; }
+  }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="1AV">
+      <span data-i18n="dept">IT Department</span>
+    </div>
+    <div class="lang" role="group" aria-label="Language / Wika">
+      <button type="button" id="langEn" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" id="langFil" data-lang="fil" aria-pressed="false">Filipino</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main class="sheet">
+    <section id="formView">
+      <h1 data-i18n="title">Password Reset Request</h1>
+      <p class="intro" data-i18n="intro">Use this form if you cannot sign in and need a new password. The 1AV IT Department will process your request.</p>
+      <p class="required-note" data-i18n="required">Please answer all fields.</p>
+      <p class="preview-note" id="previewNote" data-i18n="preview" hidden>Preview only. This page is not yet connected, so nothing is sent.</p>
+
+      <form id="resetForm" novalidate>
+        <div class="field" data-field="employeeNo">
+          <label for="employeeNo" data-i18n="empLabel">Employee Number</label>
+          <span class="hint" id="employeeNoHint" data-i18n="empHint">The number on your company ID. Example: 00123</span>
+          <input type="text" id="employeeNo" name="employeeNo" enterkeyhint="next" inputmode="numeric" autocomplete="off" maxlength="5" aria-describedby="employeeNoHint employeeNoErr">
+          <span class="error" id="employeeNoErr" hidden></span>
+        </div>
+
+        <div class="field" data-field="username">
+          <label for="username" data-i18n="userLabel">ESS Username</label>
+          <span class="hint" id="usernameHint" data-i18n="userHint">The name you type when you sign in to ESS. Example: jdcjuan</span>
+          <input type="text" id="username" name="username" enterkeyhint="next" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30" aria-describedby="usernameHint usernameErr">
+          <span class="error" id="usernameErr" hidden></span>
+        </div>
+
+        <div class="field" data-field="mobileNumber">
+          <label for="mobileNumber" data-i18n="mobileLabel">Mobile Number</label>
+          <span class="hint" id="mobileNumberHint" data-i18n="mobileHint">11 digits, starting with 09. Example: 09123456789</span>
+          <input type="tel" id="mobileNumber" name="mobileNumber" enterkeyhint="next" inputmode="numeric" autocomplete="tel" maxlength="16" aria-describedby="mobileNumberHint mobileNumberErr">
+          <span class="error" id="mobileNumberErr" hidden></span>
+        </div>
+
+        <div class="field" data-field="personalEmail">
+          <label for="personalEmail" data-i18n="emailLabel">Personal Email Address</label>
+          <span class="hint" id="personalEmailHint" data-i18n="emailHint">Not your company email. Example: juandelacruz@gmail.com</span>
+          <input type="email" id="personalEmail" name="personalEmail" enterkeyhint="next" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="120" aria-describedby="personalEmailHint personalEmailErr">
+          <span class="error" id="personalEmailErr" hidden></span>
+        </div>
+
+        <div class="field" data-field="reason">
+          <label for="reason" data-i18n="reasonLabel">Reason for Request</label>
+          <span class="hint" id="reasonHint" data-i18n="reasonHint">Tell us briefly why you need a new password. Example: I forgot my password.</span>
+          <textarea id="reason" name="reason" maxlength="250" aria-describedby="reasonHint reasonErr"></textarea>
+          <span class="error" id="reasonErr" hidden></span>
+        </div>
+
+        <div class="field" data-field="confirm">
+          <label class="check" for="confirm">
+            <input type="checkbox" id="confirm" name="confirm" aria-describedby="confirmErr">
+            <span data-i18n="confirmLabel">I confirm that this is my own account and the details above are correct.</span>
+          </label>
+          <span class="error" id="confirmErr" hidden></span>
+        </div>
+
+        <div class="trap" aria-hidden="true">
+          <label for="companyWebsite">Leave this field empty</label>
+          <input type="text" id="companyWebsite" name="companyWebsite" tabindex="-1" autocomplete="off">
+        </div>
+
+        <p class="send-error" id="sendError" role="alert" hidden></p>
+
+        <div class="actions">
+          <button type="submit" class="btn" id="submitBtn" data-i18n="submit">Submit Request</button>
+          <small data-i18n="once">Please submit only once.</small>
+        </div>
+      </form>
+
+      <p class="safety" data-i18n="safety">The IT Department will never ask for your current password. Do not share it with anyone.</p>
+    </section>
+
+    <section id="doneView" class="done" hidden aria-live="polite">
+      <div class="tick" aria-hidden="true"></div>
+      <h1 id="doneHeading" tabindex="-1" data-i18n="doneTitle">Request Submitted</h1>
+      <p data-i18n="doneP1">Your request has been sent to the 1AV IT Department. It is now in the queue for processing.</p>
+      <p data-i18n="doneP2">We will send updates to your mobile number and personal email address.</p>
+      <div class="ref">
+        <span class="ref-label" data-i18n="refLabel">Reference Number</span>
+        <code id="refNo"></code>
+        <span class="ref-keep" data-i18n="refKeep">Please keep this number.</span>
+      </div>
+      <dl class="summary" id="summary"></dl>
+      <div class="actions">
+        <button type="button" class="btn secondary" id="againBtn" data-i18n="again">Submit Another Request</button>
+      </div>
+    </section>
+  </main>
+  <p class="foot">1Aviation Groundhandling Services, Corp.</p>
+</div>
+
+<script>
+/* ============================================================
+   SETUP (1AV IT Innovation)
+   1. In Power Automate create an instant flow with the trigger
+      "When an HTTP request is received".
+        - Who can trigger the flow: Anyone
+        - Method: POST
+        - Leave the request body JSON schema EMPTY.
+   2. Add "Parse JSON":
+        Content: json(triggerBody())
+        Schema:
+        {
+          "type": "object",
+          "properties": {
+            "referenceNo":   { "type": "string" },
+            "employeeNo":    { "type": "string" },
+            "username":      { "type": "string" },
+            "mobileNumber":  { "type": "string" },
+            "personalEmail": { "type": "string" },
+            "reason":        { "type": "string" },
+            "language":      { "type": "string" },
+            "submittedAt":   { "type": "string" }
+          }
+        }
+   3. Add "Send an email (V2)" to the IT mailbox using the parsed values,
+      and optionally a second one to personalEmail as an acknowledgement.
+   4. Save the flow, copy the HTTP POST URL from the trigger and paste it
+      into FLOW_URL below.
+
+   Why text/plain + no-cors: a browser calling a flow URL from another site
+   is blocked by CORS when it sends application/json. Sending the JSON as
+   plain text avoids that, which is why step 2 uses json(triggerBody()).
+   The page cannot read the flow's reply in this mode, so it shows the
+   confirmation once the request has left the browser.
+   ============================================================ */
+const CONFIG = {
+  FLOW_URL: "",                    // paste the Power Automate HTTP POST URL here
+  EMP_NO_PATTERN: /^\d{5}$/,       // change if employee numbers are not always 5 digits
+  REASON_MIN: 5,
+  TIMEOUT_MS: 20000
+};
+
+/* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
+const TEXT = {
+  en: {
+    dept: "IT Department",
+    title: "Password Reset Request",
+    intro: "Use this form if you cannot sign in and need a new password. The 1AV IT Department will process your request.",
+    required: "Please answer all fields.",
+    preview: "Preview only. This page is not yet connected, so nothing is sent.",
+    empLabel: "Employee Number",
+    empHint: "The number on your company ID. Example: 00123",
+    userLabel: "ESS Username",
+    userHint: "The name you type when you sign in to ESS. Example: jdcjuan",
+    mobileLabel: "Mobile Number",
+    mobileHint: "11 digits, starting with 09. Example: 09123456789",
+    emailLabel: "Personal Email Address",
+    emailHint: "Not your company email. Example: juandelacruz@gmail.com",
+    reasonLabel: "Reason for Request",
+    reasonHint: "Tell us briefly why you need a new password. Example: I forgot my password.",
+    confirmLabel: "I confirm that this is my own account and the details above are correct.",
+    submit: "Submit Request",
+    sending: "Sending…",
+    once: "Please submit only once.",
+    safety: "The IT Department will never ask for your current password. Do not share it with anyone.",
+    doneTitle: "Request Submitted",
+    doneP1: "Your request has been sent to the 1AV IT Department. It is now in the queue for processing.",
+    doneP2: "We will send updates to your mobile number and personal email address.",
+    refLabel: "Reference Number",
+    refKeep: "Please keep this number.",
+    again: "Submit Another Request",
+    errEmp: "Enter your 5-digit employee number. Example: 00123",
+    errUser: "Enter your ESS username. Use letters and numbers only. Example: jdcjuan",
+    errMobile: "Enter your 11-digit mobile number, starting with 09.",
+    errEmail: "Enter a correct email address. Example: juandelacruz@gmail.com",
+    errReason: "Write the reason for your request.",
+    errConfirm: "Tick the box to continue.",
+    errSend: "Your request was not sent. Check your internet connection and try again."
+  },
+  fil: {
+    dept: "IT Department",
+    title: "Kahilingan sa Pag-reset ng Password",
+    intro: "Gamitin ang form na ito kung hindi ka makapag-sign in at kailangan mo ng bagong password. Ang 1AV IT Department ang mag-aasikaso ng iyong kahilingan.",
+    required: "Pakisagutan ang lahat ng tanong.",
+    preview: "Preview lamang. Hindi pa nakakonekta ang page na ito, kaya walang ipinapadala.",
+    empLabel: "Numero ng Empleyado",
+    empHint: "Ang numero sa iyong company ID. Halimbawa: 00123",
+    userLabel: "ESS Username",
+    userHint: "Ang pangalang tina-type mo kapag nagsa-sign in sa ESS. Halimbawa: jdcjuan",
+    mobileLabel: "Numero ng Cellphone",
+    mobileHint: "11 numero, nagsisimula sa 09. Halimbawa: 09123456789",
+    emailLabel: "Personal na Email Address",
+    emailHint: "Hindi ang email ng kumpanya. Halimbawa: juandelacruz@gmail.com",
+    reasonLabel: "Dahilan ng Kahilingan",
+    reasonHint: "Sabihin nang maikli kung bakit kailangan mo ng bagong password. Halimbawa: Nakalimutan ko ang aking password.",
+    confirmLabel: "Pinatutunayan ko na sa akin ang account na ito at tama ang mga detalye sa itaas.",
+    submit: "Ipadala ang Kahilingan",
+    sending: "Ipinapadala…",
+    once: "Isang beses lamang ipadala.",
+    safety: "Hindi kailanman hihingin ng IT Department ang kasalukuyan mong password. Huwag itong ibigay kahit kanino.",
+    doneTitle: "Naipadala na ang Kahilingan",
+    doneP1: "Naipadala na ang iyong kahilingan sa 1AV IT Department. Nakapila na ito para maproseso.",
+    doneP2: "Magpapadala kami ng update sa iyong numero ng cellphone at personal na email address.",
+    refLabel: "Reference Number",
+    refKeep: "Pakitago ang numerong ito.",
+    again: "Magpadala ng Panibagong Kahilingan",
+    errEmp: "Ilagay ang iyong 5-digit na numero ng empleyado. Halimbawa: 00123",
+    errUser: "Ilagay ang iyong ESS username. Mga letra at numero lamang. Halimbawa: jdcjuan",
+    errMobile: "Ilagay ang iyong 11-digit na numero ng cellphone na nagsisimula sa 09.",
+    errEmail: "Ilagay ang tamang email address. Halimbawa: juandelacruz@gmail.com",
+    errReason: "Isulat ang dahilan ng iyong kahilingan.",
+    errConfirm: "Lagyan ng tsek ang kahon para magpatuloy.",
+    errSend: "Hindi naipadala ang iyong kahilingan. Tingnan ang iyong internet at subukan muli."
+  }
+};
+
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const form = $("resetForm");
+  const formView = $("formView");
+  const doneView = $("doneView");
+  const submitBtn = $("submitBtn");
+  const sendError = $("sendError");
+  let lang = "en";
+  let lastPayload = null;
+  let sending = false;
+  const t = (key) => TEXT[lang][key] || TEXT.en[key] || "";
+
+  if (!CONFIG.FLOW_URL) $("previewNote").hidden = false;
+
+  function normalizeMobile(v) {
+    let d = v.replace(/[\s\-().]/g, "");
+    if (d.startsWith("+63")) d = "0" + d.slice(3);
+    else if (d.startsWith("63") && d.length === 12) d = "0" + d.slice(2);
+    return d;
+  }
+
+  function readValues() {
+    return {
+      employeeNo: $("employeeNo").value.trim(),
+      username: $("username").value.trim().toLowerCase(),
+      mobileNumber: normalizeMobile($("mobileNumber").value.trim()),
+      personalEmail: $("personalEmail").value.trim().toLowerCase(),
+      reason: $("reason").value.trim().replace(/\s+/g, " "),
+      confirm: $("confirm").checked
+    };
+  }
+
+  // Each rule returns the key of its error text, or "" when the value is fine.
+  const rules = {
+    employeeNo: (v) => CONFIG.EMP_NO_PATTERN.test(v) ? "" : "errEmp",
+    username: (v) => /^[a-z0-9._-]{3,30}$/.test(v) ? "" : "errUser",
+    mobileNumber: (v) => /^09\d{9}$/.test(v) ? "" : "errMobile",
+    personalEmail: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? "" : "errEmail",
+    reason: (v) => v.length >= CONFIG.REASON_MIN ? "" : "errReason",
+    confirm: (v) => v ? "" : "errConfirm"
+  };
+
+  function showError(name, key) {
+    const wrap = form.querySelector('[data-field="' + name + '"]');
+    const err = $(name + "Err");
+    const input = $(name);
+    wrap.classList.toggle("invalid", !!key);
+    err.textContent = key ? t(key) : "";
+    err.hidden = !key;
+    if (key) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+  }
+
+  function validate(values, only) {
+    let firstBad = null;
+    Object.keys(rules).forEach((name) => {
+      if (only && only !== name) return;
+      const key = rules[name](values[name]);
+      showError(name, key);
+      if (key && !firstBad) firstBad = name;
+    });
+    return firstBad;
+  }
+
+  const isInvalid = (name) => form.querySelector('[data-field="' + name + '"]').classList.contains("invalid");
+
+  $("employeeNo").addEventListener("input", (e) => { e.target.value = e.target.value.replace(/\D/g, ""); });
+  Object.keys(rules).forEach((name) => {
+    const el = $(name);
+    const recheck = () => { if (isInvalid(name)) validate(readValues(), name); };
+    el.addEventListener("input", recheck);
+    el.addEventListener("change", recheck);
+    if (name !== "confirm") el.addEventListener("blur", () => { if (el.value.trim()) validate(readValues(), name); });
+  });
+
+  function renderSummary() {
+    if (!lastPayload) return;
+    $("refNo").textContent = lastPayload.referenceNo;
+    const rows = [
+      [t("empLabel"), lastPayload.employeeNo],
+      [t("userLabel"), lastPayload.username],
+      [t("mobileLabel"), lastPayload.mobileNumber],
+      [t("emailLabel"), lastPayload.personalEmail],
+      [t("reasonLabel"), lastPayload.reason]
+    ];
+    const dl = $("summary");
+    dl.textContent = "";
+    rows.forEach(([k, v]) => {
+      const dt = document.createElement("dt"); dt.textContent = k;
+      const dd = document.createElement("dd"); dd.textContent = v;
+      dl.append(dt, dd);
+    });
+  }
+
+  function applyLang(next) {
+    lang = TEXT[next] ? next : "en";
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.querySelectorAll(".lang button").forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
+    if (sending) submitBtn.textContent = t("sending");
+    if (!sendError.hidden) sendError.textContent = t("errSend");
+    const values = readValues();
+    Object.keys(rules).forEach((name) => { if (isInvalid(name)) validate(values, name); });
+    renderSummary();
+    try { localStorage.setItem("1av-reset-lang", lang); } catch (e) {}
+  }
+
+  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+  let saved = null;
+  try { saved = localStorage.getItem("1av-reset-lang"); } catch (e) {}
+  if (saved && saved !== "en") applyLang(saved);
+
+  function makeReference() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    const stamp = String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate());
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let tail = "";
+    const rnd = new Uint32Array(4);
+    window.crypto.getRandomValues(rnd);
+    rnd.forEach((n) => { tail += chars[n % chars.length]; });
+    return "PWR-" + stamp + "-" + tail;
+  }
+
+  async function send(payload) {
+    if (!CONFIG.FLOW_URL) {               // preview mode
+      await new Promise((r) => setTimeout(r, 600));
+      return;
+    }
+    if (navigator.onLine === false) throw new Error("offline");
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), CONFIG.TIMEOUT_MS);
+    try {
+      await fetch(CONFIG.FLOW_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function showDone(payload) {
+    lastPayload = payload;
+    renderSummary();
+    formView.hidden = true;
+    doneView.hidden = false;
+    $("doneHeading").focus();
+    window.scrollTo(0, 0);
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (sending) return;
+    sendError.hidden = true;
+    const values = readValues();
+    const bad = validate(values);
+    if (bad) { $(bad).focus(); return; }
+
+    const payload = {
+      referenceNo: makeReference(),
+      employeeNo: values.employeeNo,
+      username: values.username,
+      mobileNumber: values.mobileNumber,
+      personalEmail: values.personalEmail,
+      reason: values.reason,
+      language: lang,
+      submittedAt: new Date().toISOString()
+    };
+
+    // Bots fill the hidden field. Show them the confirmation and send nothing.
+    if ($("companyWebsite").value) { showDone(payload); return; }
+
+    sending = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = t("sending");
+    try {
+      await send(payload);
+      showDone(payload);
+    } catch (err) {
+      sendError.textContent = t("errSend");
+      sendError.hidden = false;
+    } finally {
+      sending = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = t("submit");
+    }
+  });
+
+  $("againBtn").addEventListener("click", () => {
+    form.reset();
+    lastPayload = null;
+    Object.keys(rules).forEach((name) => showError(name, ""));
+    doneView.hidden = true;
+    formView.hidden = false;
+    $("employeeNo").focus();
+  });
+})();
+</script>
+</html>
