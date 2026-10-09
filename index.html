@@ -282,7 +282,7 @@
       "When a Teams webhook request is received".
         - Who can trigger the flow: Anyone
    2. Add "Parse JSON":
-        Content: json(triggerBody())
+        Content: triggerBody()   (the "Body" item from the trigger)
         Schema:
         {
           "type": "object",
@@ -305,11 +305,9 @@
       (.github/workflows/deploy.yml) replaces the FLOW_URL placeholder below
       with the secret every time the site is published.
 
-   Why text/plain + no-cors: a browser calling a flow URL from another site
-   is blocked by CORS when it sends application/json. Sending the JSON as
-   plain text avoids that, which is why step 2 uses json(triggerBody()).
-   The page cannot read the flow's reply in this mode, so it shows the
-   confirmation once the request has left the browser.
+   The page sends the request as JSON (the Teams webhook trigger only accepts
+   a JSON object) and reads the flow's reply, so the confirmation screen is
+   shown only when the flow has accepted the request.
    ============================================================ */
 const CONFIG = {
   FLOW_URL: "__FLOW_URL__",        // filled in automatically from the ALERT_WEBHOOK_URL secret on deploy; leave as is
@@ -527,13 +525,13 @@ const TEXT = {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), CONFIG.TIMEOUT_MS);
     try {
-      await fetch(CONFIG.FLOW_URL, {
+      const res = await fetch(CONFIG.FLOW_URL, {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
         signal: ctrl.signal
       });
+      if (!res.ok) throw new Error("Flow replied with status " + res.status);
     } finally {
       clearTimeout(timer);
     }
