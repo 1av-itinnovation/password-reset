@@ -264,6 +264,13 @@
           <span class="error" id="personalEmailErr" hidden></span>
         </div>
 
+        <div class="field" data-field="confirmEmail">
+          <label for="confirmEmail" data-i18n="email2Label">Confirm Personal Email Address</label>
+          <span class="hint" id="confirmEmailHint" data-i18n="email2Hint">Type your email address again to make sure it is correct.</span>
+          <input type="email" id="confirmEmail" name="confirmEmail" enterkeyhint="next" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="120" aria-describedby="confirmEmailHint confirmEmailErr">
+          <span class="error" id="confirmEmailErr" hidden></span>
+        </div>
+
         <div class="field" data-field="reason">
           <label for="reason" data-i18n="reasonLabel">Reason for Request</label>
           <span class="hint" id="reasonHint" data-i18n="reasonHint">Tell us briefly why you need a new password. Example: I forgot my password.</span>
@@ -374,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.2.0"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.3.0"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -418,6 +425,10 @@ const TEXT = {
     errUser: "Enter your ESS username. Use letters and numbers only. Example: jdcjuan",
     errMobile: "Enter your 11-digit mobile number, starting with 09.",
     errEmail: "Enter a correct email address. Example: juandelacruz@gmail.com",
+    errEmailDomain: "Check your email address. Did you mean {email}?",
+    errEmail2: "The two email addresses are not the same. Check both.",
+    email2Label: "Confirm Personal Email Address",
+    email2Hint: "Type your email address again to make sure it is correct.",
     errReason: "Write the reason for your request.",
     errConfirm: "Tick the box to continue.",
     errSend: "Your request was not sent. Check your internet connection and try again."
@@ -461,6 +472,10 @@ const TEXT = {
     errUser: "Ilagay ang iyong ESS username. Mga letra at numero lamang. Halimbawa: jdcjuan",
     errMobile: "Ilagay ang iyong 11-digit na numero ng cellphone na nagsisimula sa 09.",
     errEmail: "Ilagay ang tamang email address. Halimbawa: juandelacruz@gmail.com",
+    errEmailDomain: "Pakisuri ang email address. Ito ba ang ibig mong sabihin: {email}?",
+    errEmail2: "Hindi magkapareho ang dalawang email address. Pakisuri ang dalawa.",
+    email2Label: "Ulitin ang Personal na Email Address",
+    email2Hint: "I-type muli ang iyong email address para matiyak na tama ito.",
     errReason: "Isulat ang dahilan ng iyong kahilingan.",
     errConfirm: "Lagyan ng tsek ang kahon para magpatuloy.",
     errSend: "Hindi naipadala ang iyong kahilingan. Tingnan ang iyong internet at subukan muli."
@@ -497,17 +512,36 @@ const TEXT = {
       username: $("username").value.trim().toLowerCase(),
       mobileNumber: normalizeMobile($("mobileNumber").value.trim()),
       personalEmail: $("personalEmail").value.trim().toLowerCase(),
+      confirmEmail: $("confirmEmail").value.trim().toLowerCase(),
       reason: $("reason").value.trim().replace(/\s+/g, " "),
       confirm: $("confirm").checked
     };
   }
+
+  // Common misspellings of email endings and what they were meant to be.
+  const DOMAIN_FIXES = {
+    "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gmal.com": "gmail.com", "gamil.com": "gmail.com",
+    "gnail.com": "gmail.com", "gmaill.com": "gmail.com", "gmail.con": "gmail.com", "gmail.co": "gmail.com",
+    "gmail.cm": "gmail.com", "gmail.om": "gmail.com", "gmail.comm": "gmail.com", "gmail.com.ph": "gmail.com",
+    "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "yhoo.com": "yahoo.com", "yahoo.con": "yahoo.com", "yahoo.co": "yahoo.com",
+    "hotmial.com": "hotmail.com", "hotmal.com": "hotmail.com", "hotmail.con": "hotmail.com",
+    "outlok.com": "outlook.com", "outlook.con": "outlook.com", "icloud.con": "icloud.com", "iclod.com": "icloud.com"
+  };
+  let emailSuggestion = "";
 
   // Each rule returns the key of its error text, or "" when the value is fine.
   const rules = {
     employeeNo: (v) => CONFIG.EMP_NO_PATTERN.test(v) ? "" : "errEmp",
     username: (v) => /^[a-z0-9._-]{3,30}$/.test(v) ? "" : "errUser",
     mobileNumber: (v) => /^09\d{9}$/.test(v) ? "" : "errMobile",
-    personalEmail: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? "" : "errEmail",
+    personalEmail: (v) => {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return "errEmail";
+      const at = v.lastIndexOf("@");
+      const fix = DOMAIN_FIXES[v.slice(at + 1)];
+      if (fix) { emailSuggestion = v.slice(0, at + 1) + fix; return "errEmailDomain"; }
+      return "";
+    },
+    confirmEmail: (v, all) => v && v === all.personalEmail ? "" : "errEmail2",
     reason: (v) => v.length >= CONFIG.REASON_MIN ? "" : "errReason",
     confirm: (v) => v ? "" : "errConfirm"
   };
@@ -517,7 +551,7 @@ const TEXT = {
     const err = $(name + "Err");
     const input = $(name);
     wrap.classList.toggle("invalid", !!key);
-    err.textContent = key ? t(key) : "";
+    err.textContent = key ? t(key).replace("{email}", emailSuggestion) : "";
     err.hidden = !key;
     if (key) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
   }
@@ -526,7 +560,7 @@ const TEXT = {
     let firstBad = null;
     Object.keys(rules).forEach((name) => {
       if (only && only !== name) return;
-      const key = rules[name](values[name]);
+      const key = rules[name](values[name], values);
       showError(name, key);
       if (key && !firstBad) firstBad = name;
     });
@@ -539,6 +573,9 @@ const TEXT = {
   // moment pushes the button down and the press misses it. Submit checks every field anyway.
   let pressingSubmit = false;
   submitBtn.addEventListener("pointerdown", () => { pressingSubmit = true; setTimeout(() => { pressingSubmit = false; }, 800); });
+
+  // Fixing the first email also re-checks the "type it again" field.
+  $("personalEmail").addEventListener("input", () => { if (isInvalid("confirmEmail")) validate(readValues(), "confirmEmail"); });
 
   $("employeeNo").addEventListener("input", (e) => { e.target.value = e.target.value.replace(/\D/g, ""); });
   Object.keys(rules).forEach((name) => {
