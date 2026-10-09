@@ -256,6 +256,7 @@
     </section>
 
     <section id="doneView" class="done" hidden aria-live="polite">
+      <p class="preview-note" id="donePreviewNote" data-i18n="donePreview" hidden style="margin:0 0 20px;font-weight:600">Preview only. This request was NOT sent to the IT Department.</p>
       <div class="tick" aria-hidden="true"></div>
       <h1 id="doneHeading" tabindex="-1" data-i18n="doneTitle">Request Submitted</h1>
       <p data-i18n="doneP1">Your request has been sent to the 1AV IT Department. It is now in the queue for processing.</p>
@@ -325,6 +326,7 @@ const TEXT = {
     intro: "Use this form if you cannot sign in and need a new password. The 1AV IT Department will process your request.",
     required: "Please answer all fields.",
     preview: "Preview only. This page is not yet connected, so nothing is sent.",
+    donePreview: "Preview only. This request was NOT sent to the IT Department.",
     empLabel: "Employee Number",
     empHint: "The number on your company ID. Example: 00123",
     userLabel: "ESS Username",
@@ -360,6 +362,7 @@ const TEXT = {
     intro: "Gamitin ang form na ito kung hindi ka makapag-sign in at kailangan mo ng bagong password. Ang 1AV IT Department ang mag-aasikaso ng iyong kahilingan.",
     required: "Pakisagutan ang lahat ng tanong.",
     preview: "Preview lamang. Hindi pa nakakonekta ang page na ito, kaya walang ipinapadala.",
+    donePreview: "Preview lamang. HINDI naipadala ang kahilingang ito sa IT Department.",
     empLabel: "Numero ng Empleyado",
     empHint: "Ang numero sa iyong company ID. Halimbawa: 00123",
     userLabel: "ESS Username",
@@ -404,7 +407,7 @@ const TEXT = {
   const t = (key) => TEXT[lang][key] || TEXT.en[key] || "";
 
   const connected = /^https:\/\//.test(CONFIG.FLOW_URL);
-  if (!connected) $("previewNote").hidden = false;
+  if (!connected) { $("previewNote").hidden = false; $("donePreviewNote").hidden = false; }
 
   function normalizeMobile(v) {
     let d = v.replace(/[\s\-().]/g, "");
