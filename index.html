@@ -277,11 +277,9 @@
 <script>
 /* ============================================================
    SETUP (1AV IT Innovation)
-   1. In Power Automate create an instant flow with the trigger
-      "When an HTTP request is received".
+   1. In Power Automate create a flow with the trigger
+      "When a Teams webhook request is received".
         - Who can trigger the flow: Anyone
-        - Method: POST
-        - Leave the request body JSON schema EMPTY.
    2. Add "Parse JSON":
         Content: json(triggerBody())
         Schema:
@@ -300,8 +298,11 @@
         }
    3. Add "Send an email (V2)" to the IT mailbox using the parsed values,
       and optionally a second one to personalEmail as an acknowledgement.
-   4. Save the flow, copy the HTTP POST URL from the trigger and paste it
-      into FLOW_URL below.
+   4. Save the flow and copy the HTTP URL from the trigger into the GitHub
+      repository secret ALERT_WEBHOOK_URL (Settings > Secrets and variables >
+      Actions). Do NOT paste it in this file: the deploy workflow
+      (.github/workflows/deploy.yml) replaces the FLOW_URL placeholder below
+      with the secret every time the site is published.
 
    Why text/plain + no-cors: a browser calling a flow URL from another site
    is blocked by CORS when it sends application/json. Sending the JSON as
@@ -310,7 +311,7 @@
    confirmation once the request has left the browser.
    ============================================================ */
 const CONFIG = {
-  FLOW_URL: "",                    // paste the Power Automate HTTP POST URL here
+  FLOW_URL: "__FLOW_URL__",        // filled in automatically from the ALERT_WEBHOOK_URL secret on deploy; leave as is
   EMP_NO_PATTERN: /^\d{5}$/,       // change if employee numbers are not always 5 digits
   REASON_MIN: 5,
   TIMEOUT_MS: 20000
@@ -402,7 +403,8 @@ const TEXT = {
   let sending = false;
   const t = (key) => TEXT[lang][key] || TEXT.en[key] || "";
 
-  if (!CONFIG.FLOW_URL) $("previewNote").hidden = false;
+  const connected = /^https:\/\//.test(CONFIG.FLOW_URL);
+  if (!connected) $("previewNote").hidden = false;
 
   function normalizeMobile(v) {
     let d = v.replace(/[\s\-().]/g, "");
@@ -514,7 +516,7 @@ const TEXT = {
   }
 
   async function send(payload) {
-    if (!CONFIG.FLOW_URL) {               // preview mode
+    if (!connected) {                     // preview mode
       await new Promise((r) => setTimeout(r, 600));
       return;
     }
