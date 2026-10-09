@@ -261,7 +261,8 @@
       <h1 id="doneHeading" tabindex="-1" data-i18n="doneTitle">Request Submitted</h1>
       <p data-i18n="doneP1">Your request has been sent to the 1AV IT Department. It is now in the queue for processing.</p>
       <p data-i18n="doneP2">We will send updates to your mobile number and personal email address.</p>
-      <div class="ref">
+      <p id="refPending" data-i18n="refPending" hidden>Your reference number will be sent to your personal email address.</p>
+      <div class="ref" id="refBox" hidden>
         <span class="ref-label" data-i18n="refLabel">Reference Number</span>
         <code id="refNo"></code>
         <span class="ref-keep" data-i18n="refKeep">Please keep this number.</span>
@@ -345,6 +346,7 @@ const TEXT = {
     doneP2: "We will send updates to your mobile number and personal email address.",
     refLabel: "Reference Number",
     refKeep: "Please keep this number.",
+    refPending: "Your reference number will be sent to your personal email address.",
     again: "Submit Another Request",
     errEmp: "Enter your 5-digit employee number. Example: 00123",
     errUser: "Enter your ESS username. Use letters and numbers only. Example: jdcjuan",
@@ -381,6 +383,7 @@ const TEXT = {
     doneP2: "Magpapadala kami ng update sa iyong numero ng cellphone at personal na email address.",
     refLabel: "Reference Number",
     refKeep: "Pakitago ang numerong ito.",
+    refPending: "Ipapadala ang iyong Reference Number sa iyong personal na email address.",
     again: "Magpadala ng Panibagong Kahilingan",
     errEmp: "Ilagay ang iyong 5-digit na numero ng empleyado. Halimbawa: 00123",
     errUser: "Ilagay ang iyong ESS username. Mga letra at numero lamang. Halimbawa: jdcjuan",
@@ -469,7 +472,10 @@ const TEXT = {
 
   function renderSummary() {
     if (!lastPayload) return;
-    $("refNo").textContent = lastPayload.referenceNo;
+    const ref = lastPayload.referenceNo || "";
+    $("refNo").textContent = ref;
+    $("refBox").hidden = !ref;
+    $("refPending").hidden = !!ref;
     const rows = [
       [t("empLabel"), lastPayload.employeeNo],
       [t("userLabel"), lastPayload.username],
@@ -504,22 +510,20 @@ const TEXT = {
   try { saved = localStorage.getItem("1av-reset-lang"); } catch (e) {}
   if (saved && saved !== "en") applyLang(saved);
 
-  function makeReference() {
-    const d = new Date();
-    const pad = (n) => String(n).padStart(2, "0");
-    const stamp = String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate());
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    let tail = "";
-    const rnd = new Uint32Array(4);
-    window.crypto.getRandomValues(rnd);
-    rnd.forEach((n) => { tail += chars[n % chars.length]; });
-    return "PWR-" + stamp + "-" + tail;
+  // Reference number: PWR-<employee no>-<YYMMDD>-<HHMM>, always in Philippine time.
+  function makeReference(employeeNo) {
+    const parts = {};
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Manila", hourCycle: "h23",
+      year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit"
+    }).formatToParts(new Date()).forEach((p) => { parts[p.type] = p.value; });
+    return "PWR-" + employeeNo + "-" + parts.year.slice(-2) + parts.month + parts.day + "-" + parts.hour + parts.minute;
   }
 
   async function send(payload) {
     if (!connected) {                     // preview mode
       await new Promise((r) => setTimeout(r, 600));
-      return;
+      return null;
     }
     if (navigator.onLine === false) throw new Error("offline");
     const ctrl = new AbortController();
@@ -532,6 +536,10 @@ const TEXT = {
         signal: ctrl.signal
       });
       if (!res.ok) throw new Error("Flow replied with status " + res.status);
+      // If the flow has a Response action that returns {"referenceNo": "..."}, show that number.
+      let ref = null;
+      try { const data = await res.json(); if (data && /^[A-Za-z0-9-]{4,40}$/.test(String(data.referenceNo || ""))) ref = String(data.referenceNo); } catch (e) {}
+      return ref;
     } finally {
       clearTimeout(timer);
     }
@@ -555,7 +563,7 @@ const TEXT = {
     if (bad) { $(bad).focus(); return; }
 
     const payload = {
-      referenceNo: makeReference(),
+      referenceNo: makeReference(values.employeeNo),
       employeeNo: values.employeeNo,
       username: values.username,
       mobileNumber: values.mobileNumber,
@@ -572,7 +580,8 @@ const TEXT = {
     submitBtn.disabled = true;
     submitBtn.textContent = t("sending");
     try {
-      await send(payload);
+      const flowRef = await send(payload);
+      if (flowRef) payload.referenceNo = flowRef;
       showDone(payload);
     } catch (err) {
       sendError.textContent = t("errSend");
