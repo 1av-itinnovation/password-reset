@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.3.1"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.4.0"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -427,6 +427,7 @@ const TEXT = {
     errEmail: "Enter a correct email address. Example: juandelacruz@gmail.com",
     errEmailDomain: "Check your email address. Did you mean {email}?",
     errEmail2: "The two email addresses are not the same. Check both.",
+    errNotFound: "We could not find this Employee Number and ESS Username in our records. Check both and try again.",
     email2Label: "Confirm Personal Email Address",
     email2Hint: "Type your email address again to make sure it is correct.",
     errReason: "Write the reason for your request.",
@@ -474,6 +475,7 @@ const TEXT = {
     errEmail: "Ilagay ang tamang email address. Halimbawa: juandelacruz@gmail.com",
     errEmailDomain: "Pakisuri ang email address. Ito ba ang ibig mong sabihin: {email}?",
     errEmail2: "Hindi magkapareho ang dalawang email address. Pakisuri ang dalawa.",
+    errNotFound: "Hindi namin makita ang Employee Number at ESS Username na ito sa aming records. Pakisuri ang dalawa at subukan muli.",
     email2Label: "Ulitin ang Personal na Email Address",
     email2Hint: "I-type muli ang iyong email address para matiyak na tama ito.",
     errReason: "Isulat ang dahilan ng iyong kahilingan.",
@@ -661,8 +663,11 @@ const TEXT = {
         });
         if (res.ok) {
           // If the flow has a Response action that returns {"referenceNo": "..."}, show that number.
-          let ref = null;
-          try { const data = await res.json(); if (data && /^[A-Za-z0-9-]{4,40}$/.test(String(data.referenceNo || ""))) ref = String(data.referenceNo); } catch (e) {}
+          let ref = null, data = null;
+          try { data = await res.json(); } catch (e) {}
+          // A Response action in the flow can reject the request: {"result": "not_found"}.
+          if (data && data.result === "not_found") { lastError = Object.assign(new Error("not found"), { code: "notFound" }); break; }
+          if (data && /^[A-Za-z0-9-]{4,40}$/.test(String(data.referenceNo || ""))) ref = String(data.referenceNo);
           return ref;
         }
         lastError = new Error("Flow replied with status " + res.status);
@@ -755,6 +760,15 @@ const TEXT = {
       pending = null;
       showDone(payload);
     } catch (err) {
+      if (err && err.code === "notFound") {
+        // The flow could not match the employee: back to the form with both fields marked.
+        closeDialog();
+        pending = null;
+        showError("employeeNo", "errNotFound");
+        showError("username", "errNotFound");
+        $("employeeNo").focus();
+        return;
+      }
       reviewError.textContent = t("errSend");
       reviewError.hidden = false;
       confirmBtn.textContent = t("tryAgain");
