@@ -235,46 +235,46 @@
       <p class="required-note" data-i18n="required">Please answer all fields.</p>
       <p class="preview-note" id="previewNote" data-i18n="preview" hidden>Preview only. This page is not yet connected, so nothing is sent.</p>
 
-      <form id="resetForm" novalidate>
+      <form id="resetForm" novalidate autocomplete="off">
         <div class="field" data-field="employeeNo">
           <label for="employeeNo" data-i18n="empLabel">Employee Number</label>
           <span class="hint" id="employeeNoHint" data-i18n="empHint">The number on your company ID. Example: 00123</span>
-          <input type="text" id="employeeNo" name="employeeNo" enterkeyhint="next" inputmode="numeric" autocomplete="off" maxlength="5" aria-describedby="employeeNoHint employeeNoErr">
+          <input type="text" id="employeeNo" name="employeeNo" enterkeyhint="next" inputmode="numeric" maxlength="5" aria-describedby="employeeNoHint employeeNoErr" autocomplete="one-time-code" data-lpignore="true" data-1p-ignore data-form-type="other">
           <span class="error" id="employeeNoErr" hidden></span>
         </div>
 
         <div class="field" data-field="username">
           <label for="username" data-i18n="userLabel">ESS Username</label>
           <span class="hint" id="usernameHint" data-i18n="userHint">The name you type when you sign in to ESS. Example: jdcjuan</span>
-          <input type="text" id="username" name="username" enterkeyhint="next" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30" aria-describedby="usernameHint usernameErr">
+          <input type="text" id="username" name="username" enterkeyhint="next" autocapitalize="none" spellcheck="false" maxlength="30" aria-describedby="usernameHint usernameErr" autocomplete="one-time-code" data-lpignore="true" data-1p-ignore data-form-type="other">
           <span class="error" id="usernameErr" hidden></span>
         </div>
 
         <div class="field" data-field="mobileNumber">
           <label for="mobileNumber" data-i18n="mobileLabel">Mobile Number</label>
           <span class="hint" id="mobileNumberHint" data-i18n="mobileHint">11 digits, starting with 09. Example: 09123456789</span>
-          <input type="tel" id="mobileNumber" name="mobileNumber" enterkeyhint="next" inputmode="numeric" autocomplete="tel" maxlength="16" aria-describedby="mobileNumberHint mobileNumberErr">
+          <input type="text" id="mobileNumber" name="mobileNumber" enterkeyhint="next" inputmode="numeric" maxlength="16" aria-describedby="mobileNumberHint mobileNumberErr" autocomplete="one-time-code" data-lpignore="true" data-1p-ignore data-form-type="other">
           <span class="error" id="mobileNumberErr" hidden></span>
         </div>
 
         <div class="field" data-field="personalEmail">
           <label for="personalEmail" data-i18n="emailLabel">Personal Email Address</label>
           <span class="hint" id="personalEmailHint" data-i18n="emailHint">Not your company email. Example: juandelacruz@gmail.com</span>
-          <input type="email" id="personalEmail" name="personalEmail" enterkeyhint="next" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="120" aria-describedby="personalEmailHint personalEmailErr">
+          <input type="text" inputmode="email" id="personalEmail" name="personalEmail" enterkeyhint="next" autocapitalize="none" spellcheck="false" maxlength="120" aria-describedby="personalEmailHint personalEmailErr" autocomplete="one-time-code" data-lpignore="true" data-1p-ignore data-form-type="other">
           <span class="error" id="personalEmailErr" hidden></span>
         </div>
 
         <div class="field" data-field="confirmEmail">
           <label for="confirmEmail" data-i18n="email2Label">Confirm Personal Email Address</label>
           <span class="hint" id="confirmEmailHint" data-i18n="email2Hint">Type your email address again to make sure it is correct.</span>
-          <input type="email" id="confirmEmail" name="confirmEmail" enterkeyhint="next" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="120" aria-describedby="confirmEmailHint confirmEmailErr">
+          <input type="text" inputmode="email" id="confirmEmail" name="confirmEmail" enterkeyhint="next" autocapitalize="none" spellcheck="false" maxlength="120" aria-describedby="confirmEmailHint confirmEmailErr" autocomplete="one-time-code" data-lpignore="true" data-1p-ignore data-form-type="other">
           <span class="error" id="confirmEmailErr" hidden></span>
         </div>
 
         <div class="field" data-field="reason">
           <label for="reason" data-i18n="reasonLabel">Reason for Request</label>
           <span class="hint" id="reasonHint" data-i18n="reasonHint">Tell us briefly why you need a new password. You may write in Tagalog or English. Example: I forgot my password.</span>
-          <textarea id="reason" name="reason" maxlength="250" aria-describedby="reasonHint reasonErr"></textarea>
+          <textarea id="reason" name="reason" autocomplete="off" maxlength="250" aria-describedby="reasonHint reasonErr"></textarea>
           <span class="error" id="reasonErr" hidden></span>
         </div>
 
@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.5.1"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.6.0"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -428,6 +428,7 @@ const TEXT = {
     errEmailDomain: "Check your email address. Did you mean {email}?",
     errEmail2: "The two email addresses are not the same. Check both.",
     errPaste: "Pasting is turned off. Please type your answer.",
+    errAutofill: "Auto-fill is turned off. Please type your answer.",
     errNotFound: "We could not find this Employee Number and ESS Username in our records. Check both and try again.",
     email2Label: "Confirm Personal Email Address",
     email2Hint: "Type your email address again to make sure it is correct.",
@@ -477,6 +478,7 @@ const TEXT = {
     errEmailDomain: "Pakicheck ang email address. Ito ba ang ibig mong sabihin: {email}?",
     errEmail2: "Hindi pareho ang dalawang email address. Pakicheck ang dalawa.",
     errPaste: "Bawal mag-paste dito. Paki-type ang sagot mo.",
+    errAutofill: "Bawal ang auto-fill dito. Paki-type ang sagot mo.",
     errNotFound: "Hindi namin makita ang Employee Number at ESS Username na ito sa records namin. Pakicheck ang dalawa at subukan ulit.",
     email2Label: "I-type Ulit ang Personal Email Address",
     email2Hint: "I-type ulit ang email mo para sigurado na tama.",
@@ -587,13 +589,34 @@ const TEXT = {
     el.addEventListener("beforeinput", (e) => { if (e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop") block(e); });
   });
 
+  // Auto-fill: browsers do not always obey the "do not offer saved values" hint, so a value that
+  // arrives without being typed (no keystroke behind it) is undone and the field says why.
+  const typedValue = {};
+  const autofillBlocked = {};           // keeps the "auto-fill is off" message up until the person types
+  ["employeeNo", "username", "mobileNumber", "personalEmail", "confirmEmail"].forEach((name) => {
+    const el = $(name);
+    typedValue[name] = "";
+    el.addEventListener("input", (e) => {
+      const typed = typeof e.inputType === "string" && e.inputType !== "" && e.inputType !== "insertReplacementText";
+      if (!typed) {
+        el.value = typedValue[name];
+        autofillBlocked[name] = true;
+        showError(name, "errAutofill");
+        e.stopImmediatePropagation();
+        return;
+      }
+      autofillBlocked[name] = false;
+      typedValue[name] = el.value;
+    });
+  });
+
   // Fixing the first email also re-checks the "type it again" field.
   $("personalEmail").addEventListener("input", () => { if (isInvalid("confirmEmail")) validate(readValues(), "confirmEmail"); });
 
   $("employeeNo").addEventListener("input", (e) => { e.target.value = e.target.value.replace(/\D/g, ""); });
   Object.keys(rules).forEach((name) => {
     const el = $(name);
-    const recheck = () => { if (isInvalid(name)) validate(readValues(), name); };
+    const recheck = () => { if (!autofillBlocked[name] && isInvalid(name)) validate(readValues(), name); };
     el.addEventListener("input", recheck);
     el.addEventListener("change", recheck);
     if (name !== "confirm") el.addEventListener("blur", () => { if (!pressingSubmit && el.value.trim()) validate(readValues(), name); });
@@ -791,6 +814,7 @@ const TEXT = {
 
   $("againBtn").addEventListener("click", () => {
     form.reset();
+    Object.keys(typedValue).forEach((k) => { typedValue[k] = ""; });
     lastPayload = null;
     Object.keys(rules).forEach((name) => showError(name, ""));
     doneView.hidden = true;
