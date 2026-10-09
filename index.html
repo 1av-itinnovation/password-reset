@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.6.0"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.6.1"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -429,6 +429,8 @@ const TEXT = {
     errEmail2: "The two email addresses are not the same. Check both.",
     errPaste: "Pasting is turned off. Please type your answer.",
     errAutofill: "Auto-fill is turned off. Please type your answer.",
+    errEmpNotFound: "We could not find this Employee Number in our records. Check it and try again.",
+    errUserMismatch: "This ESS Username does not match the Employee Number. Check it and try again.",
     errNotFound: "We could not find this Employee Number and ESS Username in our records. Check both and try again.",
     email2Label: "Confirm Personal Email Address",
     email2Hint: "Type your email address again to make sure it is correct.",
@@ -479,6 +481,8 @@ const TEXT = {
     errEmail2: "Hindi pareho ang dalawang email address. Pakicheck ang dalawa.",
     errPaste: "Bawal mag-paste dito. Paki-type ang sagot mo.",
     errAutofill: "Bawal ang auto-fill dito. Paki-type ang sagot mo.",
+    errEmpNotFound: "Hindi namin makita ang Employee Number na ito sa records namin. Pakicheck at subukan ulit.",
+    errUserMismatch: "Hindi tugma ang ESS Username na ito sa Employee Number. Pakicheck at subukan ulit.",
     errNotFound: "Hindi namin makita ang Employee Number at ESS Username na ito sa records namin. Pakicheck ang dalawa at subukan ulit.",
     email2Label: "I-type Ulit ang Personal Email Address",
     email2Hint: "I-type ulit ang email mo para sigurado na tama.",
@@ -700,7 +704,7 @@ const TEXT = {
           let ref = null, data = null;
           try { data = await res.json(); } catch (e) {}
           // A Response action in the flow can reject the request: {"result": "not_found"}.
-          if (data && data.result === "not_found") { lastError = Object.assign(new Error("not found"), { code: "notFound" }); break; }
+          if (data && ["not_found", "employee_not_found", "username_mismatch"].includes(data.result)) { lastError = Object.assign(new Error(data.result), { code: "rejected", result: data.result }); break; }
           if (data && /^[A-Za-z0-9-]{4,40}$/.test(String(data.referenceNo || ""))) ref = String(data.referenceNo);
           return ref;
         }
@@ -794,13 +798,21 @@ const TEXT = {
       pending = null;
       showDone(payload);
     } catch (err) {
-      if (err && err.code === "notFound") {
-        // The flow could not match the employee: back to the form with both fields marked.
+      if (err && err.code === "rejected") {
+        // The flow could not match the employee: back to the form, marking only the field that is wrong.
         closeDialog();
         pending = null;
-        showError("employeeNo", "errNotFound");
-        showError("username", "errNotFound");
-        $("employeeNo").focus();
+        if (err.result === "employee_not_found") {
+          showError("employeeNo", "errEmpNotFound");
+          $("employeeNo").focus();
+        } else if (err.result === "username_mismatch") {
+          showError("username", "errUserMismatch");
+          $("username").focus();
+        } else {
+          showError("employeeNo", "errNotFound");
+          showError("username", "errNotFound");
+          $("employeeNo").focus();
+        }
         return;
       }
       reviewError.textContent = t("errSend");
