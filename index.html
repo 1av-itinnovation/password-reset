@@ -20,6 +20,9 @@
     --light: #52CAF5;
     --deep: #0060A7;
     --white: #FFFFFF;
+    --error: #D92D20;        /* the one colour outside the 1AV palette: wrong-input warnings only */
+    --error-glow: rgba(217, 45, 32, 0.22);
+    --error-bg: #FEF3F2;
     --font: "Noto Sans", "Segoe UI", Roboto, Arial, sans-serif;
   }
 
@@ -100,15 +103,19 @@
     outline-offset: 2px;
   }
   .field.invalid input[type="text"], .field.invalid input[type="tel"], .field.invalid input[type="email"], .field.invalid textarea {
-    border: 2px solid var(--navy);
+    border: 2px solid var(--error);
+    box-shadow: 0 0 0 4px var(--error-glow);
   }
-  .error { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; margin-top: 4px; font-size: 0.9rem; font-weight: 600; }
+  .field.invalid input:focus-visible, .field.invalid textarea:focus-visible { outline-color: var(--error); }
+  .field.invalid .check input { outline: 2px solid var(--error); outline-offset: 2px; box-shadow: 0 0 0 6px var(--error-glow); }
+  .field.invalid > label { color: var(--error); }
+  .error { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; margin-top: 6px; font-size: 0.9rem; font-weight: 600; color: var(--error); }
   .error::before {
     content: "!";
     width: 20px; height: 20px;
     display: grid; place-items: center;
     border-radius: 50%;
-    background: var(--navy);
+    background: var(--error);
     color: var(--white);
     font-size: 0.8rem;
     font-weight: 700;
@@ -117,7 +124,7 @@
   .field > .check { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-weight: 400; }
   .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--blue); }
   .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .send-error { margin: 0; padding: 12px 14px; background: var(--mist); border: 2px solid var(--navy); border-radius: 6px; font-weight: 600; }
+  .send-error { margin: 0; padding: 12px 14px; background: var(--error-bg); border: 2px solid var(--error); color: var(--error); border-radius: 8px; font-weight: 600; }
 
   .btn {
     font: inherit;
@@ -273,7 +280,7 @@
       </div>
     </section>
   </main>
-  <p class="foot">1Aviation Groundhandling Services, Corp.</p>
+  <p class="foot">1Aviation Groundhandling Services, Corp. · <span id="pageVersion"></span></p>
 </div>
 
 <script>
@@ -314,7 +321,9 @@ const CONFIG = {
   FLOW_URL: "__FLOW_URL__",        // filled in automatically from the ALERT_WEBHOOK_URL secret on deploy; leave as is
   EMP_NO_PATTERN: /^\d{5}$/,       // change if employee numbers are not always 5 digits
   REASON_MIN: 5,
-  TIMEOUT_MS: 20000
+  TIMEOUT_MS: 20000,
+  RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
+  PAGE_VERSION: "1.1.2"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -407,6 +416,7 @@ const TEXT = {
   let sending = false;
   const t = (key) => TEXT[lang][key] || TEXT.en[key] || "";
 
+  $("pageVersion").textContent = "v" + CONFIG.PAGE_VERSION;
   const connected = /^https:\/\//.test(CONFIG.FLOW_URL);
   if (!connected) { $("previewNote").hidden = false; $("donePreviewNote").hidden = false; }
 
@@ -461,13 +471,18 @@ const TEXT = {
 
   const isInvalid = (name) => form.querySelector('[data-field="' + name + '"]').classList.contains("invalid");
 
+  // While Submit is being pressed, skip the leave-the-field check: an error message appearing at that
+  // moment pushes the button down and the press misses it. Submit checks every field anyway.
+  let pressingSubmit = false;
+  submitBtn.addEventListener("pointerdown", () => { pressingSubmit = true; setTimeout(() => { pressingSubmit = false; }, 800); });
+
   $("employeeNo").addEventListener("input", (e) => { e.target.value = e.target.value.replace(/\D/g, ""); });
   Object.keys(rules).forEach((name) => {
     const el = $(name);
     const recheck = () => { if (isInvalid(name)) validate(readValues(), name); };
     el.addEventListener("input", recheck);
     el.addEventListener("change", recheck);
-    if (name !== "confirm") el.addEventListener("blur", () => { if (el.value.trim()) validate(readValues(), name); });
+    if (name !== "confirm") el.addEventListener("blur", () => { if (!pressingSubmit && el.value.trim()) validate(readValues(), name); });
   });
 
   function renderSummary() {
@@ -526,23 +541,35 @@ const TEXT = {
       return null;
     }
     if (navigator.onLine === false) throw new Error("offline");
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), CONFIG.TIMEOUT_MS);
-    try {
-      const res = await fetch(CONFIG.FLOW_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: ctrl.signal
-      });
-      if (!res.ok) throw new Error("Flow replied with status " + res.status);
-      // If the flow has a Response action that returns {"referenceNo": "..."}, show that number.
-      let ref = null;
-      try { const data = await res.json(); if (data && /^[A-Za-z0-9-]{4,40}$/.test(String(data.referenceNo || ""))) ref = String(data.referenceNo); } catch (e) {}
-      return ref;
-    } finally {
-      clearTimeout(timer);
+    // Try up to 3 times. A busy or briefly unreachable flow (network error, 429, 5xx) is retried
+    // after a short wait. Every attempt carries the same reference number, so a repeat is easy to spot.
+    let lastError = null;
+    for (let attempt = 0; attempt < CONFIG.RETRY_WAITS_MS.length + 1; attempt++) {
+      if (attempt > 0) await new Promise((r) => setTimeout(r, CONFIG.RETRY_WAITS_MS[attempt - 1]));
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), CONFIG.TIMEOUT_MS);
+      try {
+        const res = await fetch(CONFIG.FLOW_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal
+        });
+        if (res.ok) {
+          // If the flow has a Response action that returns {"referenceNo": "..."}, show that number.
+          let ref = null;
+          try { const data = await res.json(); if (data && /^[A-Za-z0-9-]{4,40}$/.test(String(data.referenceNo || ""))) ref = String(data.referenceNo); } catch (e) {}
+          return ref;
+        }
+        lastError = new Error("Flow replied with status " + res.status);
+        if (res.status !== 429 && res.status < 500) break;   // the flow refused it; retrying will not help
+      } catch (err) {
+        lastError = err;
+      } finally {
+        clearTimeout(timer);
+      }
     }
+    throw lastError;
   }
 
   function showDone(payload) {
@@ -570,7 +597,8 @@ const TEXT = {
       personalEmail: values.personalEmail,
       reason: values.reason,
       language: lang,
-      submittedAt: new Date().toISOString()
+      submittedAt: new Date().toISOString(),
+      pageVersion: CONFIG.PAGE_VERSION
     };
 
     // Bots fill the hidden field. Show them the confirmation and send nothing.
