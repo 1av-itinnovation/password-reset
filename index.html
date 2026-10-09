@@ -83,7 +83,7 @@
   form { margin-top: 28px; display: flex; flex-direction: column; gap: 22px; }
   .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .field > label { font-weight: 600; }
-  .hint { font-size: 0.88rem; }
+  .hint { font-size: 0.88rem; white-space: pre-line; }
   .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field textarea {
     width: 100%;
     margin-top: 4px;
@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.6.1"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.6.2"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -446,16 +446,16 @@ const TEXT = {
     preview: "Preview lang ito. Hindi pa nakakonekta ang page, kaya walang maipapadala.",
     donePreview: "Preview lang ito. HINDI naipadala ang request sa IT Department.",
     empLabel: "Employee Number",
-    empHint: "Ang number sa company ID mo. Halimbawa: 00123",
+    empHint: "Ang number sa iyong company ID. Halimbawa: 00123",
     userLabel: "ESS Username",
-    userHint: "Ang username na gamit mo sa pag-log in sa ESS. Halimbawa: jdcjuan",
+    userHint: "Ang username na ginagamit sa pag-log in sa ESS/1AV Portal. Halimbawa: jdcjuan",
     mobileLabel: "Mobile Number",
     mobileHint: "11 numbers na nagsisimula sa 09. Halimbawa: 09123456789",
-    emailLabel: "Personal Email Address",
-    emailHint: "Huwag gamitin ang company email. Halimbawa: juandelacruz@gmail.com",
-    reasonLabel: "Dahilan ng Request",
-    reasonHint: "Sabihin kung bakit kailangan mo ng bagong password. Puwedeng Tagalog o English. Halimbawa: Nakalimutan ko ang password ko.",
-    confirmLabel: "Kinukumpirma ko na akin ang account na ito at tama ang lahat ng nilagay ko.",
+    emailLabel: "Personal na Email Address",
+    emailHint: "Gamitin ang iyong personal na email, hindi ang email ng kumpanya.\nHal.: juandelacruz@gmail.com",
+    reasonLabel: "Bakit Kailangan ng Bagong Password?",
+    reasonHint: "Isulat kung bakit kailangan mo ng bagong password. Maaari kang sumagot sa Tagalog o English.\nHal.: Nakalimutan ko ang aking password.",
+    confirmLabel: "Kinukumpirma ko na ang account na ito ay sa akin at tama ang lahat ng impormasyong inilagay ko.",
     submit: "I-submit ang Request",
     reviewTitle: "I-check ang Detalye Mo",
     reviewText: "Siguraduhing tama lahat bago i-submit.",
@@ -465,7 +465,7 @@ const TEXT = {
     sendingTitle: "Ipinapadala ang request mo…",
     sendingText: "Sandali lang. Huwag isara ang page na ito.",
     once: "Isang beses lang mag-submit.",
-    safety: "Hindi hihingin ng IT Department ang password mo. Huwag itong ibigay kahit kanino.",
+    safety: "Paalala: Huwag ilagay ang iyong password sa form. Huwag din itong ibigay sa IT Department o sa ibang departamento.",
     doneTitle: "Naipadala na ang Request Mo",
     doneP1: "Naipadala na ang request mo sa 1AV IT Department. Nakapila na ito para asikasuhin.",
     doneP2: "Makakatanggap ka ng update sa mobile number at personal email mo.",
@@ -484,8 +484,8 @@ const TEXT = {
     errEmpNotFound: "Hindi namin makita ang Employee Number na ito sa records namin. Pakicheck at subukan ulit.",
     errUserMismatch: "Hindi tugma ang ESS Username na ito sa Employee Number. Pakicheck at subukan ulit.",
     errNotFound: "Hindi namin makita ang Employee Number at ESS Username na ito sa records namin. Pakicheck ang dalawa at subukan ulit.",
-    email2Label: "I-type Ulit ang Personal Email Address",
-    email2Hint: "I-type ulit ang email mo para sigurado na tama.",
+    email2Label: "Kumpirmahin ang Personal na Email Address",
+    email2Hint: "I-type muli ang iyong email upang matiyak na pareho at tama ang nailagay.",
     errReason: "Ilagay ang dahilan ng request mo.",
     errConfirm: "I-check ang box para makapagpatuloy.",
     errSend: "Hindi naipadala ang request mo. I-check ang internet mo at subukan ulit."
