@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.4.1"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.5.1"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -427,6 +427,7 @@ const TEXT = {
     errEmail: "Enter a correct email address. Example: juandelacruz@gmail.com",
     errEmailDomain: "Check your email address. Did you mean {email}?",
     errEmail2: "The two email addresses are not the same. Check both.",
+    errPaste: "Pasting is turned off. Please type your answer.",
     errNotFound: "We could not find this Employee Number and ESS Username in our records. Check both and try again.",
     email2Label: "Confirm Personal Email Address",
     email2Hint: "Type your email address again to make sure it is correct.",
@@ -436,51 +437,52 @@ const TEXT = {
   },
   fil: {
     dept: "IT Department",
-    title: "Kahilingan sa Pag-reset ng Password",
-    intro: "Gamitin ang form na ito kung hindi ka makapag-sign in at kailangan mo ng bagong password. Ang 1AV IT Department ang mag-aasikaso ng iyong kahilingan.",
-    required: "Pakisagutan ang lahat ng tanong.",
-    preview: "Preview lamang. Hindi pa nakakonekta ang page na ito, kaya walang ipinapadala.",
-    donePreview: "Preview lamang. HINDI naipadala ang kahilingang ito sa IT Department.",
-    empLabel: "Numero ng Empleyado",
-    empHint: "Ang numero sa iyong company ID. Halimbawa: 00123",
+    title: "Request para sa Password Reset",
+    intro: "Gamitin ang form na ito kung hindi ka maka-log in at kailangan mo ng bagong password. Ang 1AV IT Department ang mag-aasikaso nito.",
+    required: "Pakisagutan lahat.",
+    preview: "Preview lang ito. Hindi pa nakakonekta ang page, kaya walang maipapadala.",
+    donePreview: "Preview lang ito. HINDI naipadala ang request sa IT Department.",
+    empLabel: "Employee Number",
+    empHint: "Ang number sa company ID mo. Halimbawa: 00123",
     userLabel: "ESS Username",
-    userHint: "Ang pangalang tina-type mo kapag nagsa-sign in sa ESS. Halimbawa: jdcjuan",
-    mobileLabel: "Numero ng Cellphone",
-    mobileHint: "11 numero, nagsisimula sa 09. Halimbawa: 09123456789",
-    emailLabel: "Personal na Email Address",
-    emailHint: "Hindi ang email ng kumpanya. Halimbawa: juandelacruz@gmail.com",
-    reasonLabel: "Dahilan ng Kahilingan",
-    reasonHint: "Sabihin nang maikli kung bakit kailangan mo ng bagong password. Puwede kang sumulat sa Tagalog o English. Halimbawa: Nakalimutan ko ang aking password.",
-    confirmLabel: "Pinatutunayan ko na sa akin ang account na ito at tama ang mga detalye sa itaas.",
-    submit: "Ipadala ang Kahilingan",
-    reviewTitle: "Suriin ang Iyong Detalye",
-    reviewText: "Siguraduhing tama ang lahat bago ipadala.",
+    userHint: "Ang username na gamit mo sa pag-log in sa ESS. Halimbawa: jdcjuan",
+    mobileLabel: "Mobile Number",
+    mobileHint: "11 numbers na nagsisimula sa 09. Halimbawa: 09123456789",
+    emailLabel: "Personal Email Address",
+    emailHint: "Huwag gamitin ang company email. Halimbawa: juandelacruz@gmail.com",
+    reasonLabel: "Dahilan ng Request",
+    reasonHint: "Sabihin kung bakit kailangan mo ng bagong password. Puwedeng Tagalog o English. Halimbawa: Nakalimutan ko ang password ko.",
+    confirmLabel: "Kinukumpirma ko na akin ang account na ito at tama ang lahat ng nilagay ko.",
+    submit: "I-submit ang Request",
+    reviewTitle: "I-check ang Detalye Mo",
+    reviewText: "Siguraduhing tama lahat bago i-submit.",
     edit: "Baguhin ang Detalye",
-    confirmSend: "Kumpirmahin at Ipadala",
-    tryAgain: "Subukan Muli",
-    sendingTitle: "Ipinapadala ang iyong kahilingan…",
+    confirmSend: "Kumpirmahin at I-submit",
+    tryAgain: "Subukan Ulit",
+    sendingTitle: "Ipinapadala ang request mo…",
     sendingText: "Sandali lang. Huwag isara ang page na ito.",
-    once: "Isang beses lamang ipadala.",
-    safety: "Hindi kailanman hihingin ng IT Department ang kasalukuyan mong password. Huwag itong ibigay kahit kanino.",
-    doneTitle: "Naipadala na ang Kahilingan",
-    doneP1: "Naipadala na ang iyong kahilingan sa 1AV IT Department. Nakapila na ito para maproseso.",
-    doneP2: "Magpapadala kami ng update sa iyong numero ng cellphone at personal na email address.",
+    once: "Isang beses lang mag-submit.",
+    safety: "Hindi hihingin ng IT Department ang password mo. Huwag itong ibigay kahit kanino.",
+    doneTitle: "Naipadala na ang Request Mo",
+    doneP1: "Naipadala na ang request mo sa 1AV IT Department. Nakapila na ito para asikasuhin.",
+    doneP2: "Makakatanggap ka ng update sa mobile number at personal email mo.",
     refLabel: "Reference Number",
-    refKeep: "Pakitago ang numerong ito.",
-    refPending: "Ipapadala ang iyong Reference Number sa iyong personal na email address.",
-    again: "Magpadala ng Panibagong Kahilingan",
-    errEmp: "Ilagay ang iyong 5-digit na numero ng empleyado. Halimbawa: 00123",
-    errUser: "Ilagay ang iyong ESS username. Mga letra at numero lamang. Halimbawa: jdcjuan",
-    errMobile: "Ilagay ang iyong 11-digit na numero ng cellphone na nagsisimula sa 09.",
+    refKeep: "Itabi ang number na ito.",
+    refPending: "Ipapadala ang Reference Number sa personal email mo.",
+    again: "Mag-submit ng Bagong Request",
+    errEmp: "Ilagay ang 5-digit na Employee Number mo. Halimbawa: 00123",
+    errUser: "Ilagay ang ESS username mo. Letters at numbers lang. Halimbawa: jdcjuan",
+    errMobile: "Ilagay ang 11-digit na mobile number na nagsisimula sa 09.",
     errEmail: "Ilagay ang tamang email address. Halimbawa: juandelacruz@gmail.com",
-    errEmailDomain: "Pakisuri ang email address. Ito ba ang ibig mong sabihin: {email}?",
-    errEmail2: "Hindi magkapareho ang dalawang email address. Pakisuri ang dalawa.",
-    errNotFound: "Hindi namin makita ang Employee Number at ESS Username na ito sa aming records. Pakisuri ang dalawa at subukan muli.",
-    email2Label: "Ulitin ang Personal na Email Address",
-    email2Hint: "I-type muli ang iyong email address para matiyak na tama ito.",
-    errReason: "Isulat ang dahilan ng iyong kahilingan.",
-    errConfirm: "Lagyan ng tsek ang kahon para magpatuloy.",
-    errSend: "Hindi naipadala ang iyong kahilingan. Tingnan ang iyong internet at subukan muli."
+    errEmailDomain: "Pakicheck ang email address. Ito ba ang ibig mong sabihin: {email}?",
+    errEmail2: "Hindi pareho ang dalawang email address. Pakicheck ang dalawa.",
+    errPaste: "Bawal mag-paste dito. Paki-type ang sagot mo.",
+    errNotFound: "Hindi namin makita ang Employee Number at ESS Username na ito sa records namin. Pakicheck ang dalawa at subukan ulit.",
+    email2Label: "I-type Ulit ang Personal Email Address",
+    email2Hint: "I-type ulit ang email mo para sigurado na tama.",
+    errReason: "Ilagay ang dahilan ng request mo.",
+    errConfirm: "I-check ang box para makapagpatuloy.",
+    errSend: "Hindi naipadala ang request mo. I-check ang internet mo at subukan ulit."
   }
 };
 
@@ -575,6 +577,15 @@ const TEXT = {
   // moment pushes the button down and the press misses it. Submit checks every field anyway.
   let pressingSubmit = false;
   submitBtn.addEventListener("pointerdown", () => { pressingSubmit = true; setTimeout(() => { pressingSubmit = false; }, 800); });
+
+  // Typing only: pasting or dragging text into a field is blocked, with a message saying why.
+  ["employeeNo", "username", "mobileNumber", "personalEmail", "confirmEmail", "reason"].forEach((name) => {
+    const el = $(name);
+    const block = (e) => { e.preventDefault(); showError(name, "errPaste"); };
+    el.addEventListener("paste", block);
+    el.addEventListener("drop", block);
+    el.addEventListener("beforeinput", (e) => { if (e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop") block(e); });
+  });
 
   // Fixing the first email also re-checks the "type it again" field.
   $("personalEmail").addEventListener("input", () => { if (isInvalid("confirmEmail")) validate(readValues(), "confirmEmail"); });
