@@ -13,21 +13,6 @@ Online form for 1Aviation Groundhandling Services, Corp. employees who cannot si
 
 The form is available in English and Filipino and works on phones, tablets and computers.
 
-## Files
-
-| File | Purpose |
-|---|---|
-| `index.html` | The whole website: page, styles, logo and script in one file |
-| `.github/workflows/deploy.yml` | Publishes the site and connects the form to the IT Department's request queue |
-| `README.md` | This document |
-
-## Maintenance
-
-- **Wording:** all labels and messages are in the `TEXT` block near the top of the script in `index.html`, under `en` (English) and `fil` (Filipino).
-- **Settings:** the `CONFIG` block in the same script holds the validation rules (for example, the employee number format).
-- **Publishing:** every change committed to the `main` branch is published automatically by the workflow in `.github/workflows/deploy.yml`. Progress is shown in the **Actions** tab, and changes go live a minute or two after the run finishes.
-- **Connection address:** stored as the repository secret `ALERT_WEBHOOK_URL` and inserted at publish time. It is never written in the repository files. After changing the secret, re-run the workflow from the **Actions** tab.
-
 ## Security
 
 - The form never asks for a password. The IT Department will never ask an employee for their current password.
