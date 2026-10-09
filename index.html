@@ -161,6 +161,39 @@
   .summary dt { font-weight: 600; padding-right: 12px; }
   .done .actions { margin-top: 28px; }
 
+  /* Review-before-sending dialog */
+  .modal {
+    border: 0;
+    border-radius: 12px;
+    padding: clamp(20px, 5vw, 32px);
+    width: min(520px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    background: var(--white);
+    color: var(--navy);
+    font-family: var(--font);
+  }
+  .modal::backdrop { background: rgba(0, 86, 135, 0.6); }
+  .modal h2 { margin: 0; font-size: 1.3rem; font-weight: 700; line-height: 1.25; text-wrap: balance; }
+  .modal h2:focus { outline: none; }
+  .modal p { margin: 8px 0 0; }
+  .modal .summary { margin-top: 18px; }
+  .modal .send-error { margin-top: 16px; }
+  .modal-actions { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
+  .sending-state { text-align: center; padding-block: 28px; }
+  .spinner {
+    width: 56px; height: 56px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    border: 5px solid var(--mist);
+    border-top-color: var(--blue);
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+  @media (max-width: 520px) { .modal-actions { flex-direction: column-reverse; } }
+
   .foot { max-width: 640px; margin: 16px auto 0; font-size: 0.82rem; text-align: center; }
 
   @media (max-width: 560px) {
@@ -283,6 +316,24 @@
   <p class="foot">1Aviation Groundhandling Services, Corp. · <span id="pageVersion"></span></p>
 </div>
 
+<dialog id="reviewDialog" class="modal" aria-labelledby="reviewTitle">
+  <div id="reviewState">
+    <h2 id="reviewTitle" tabindex="-1" data-i18n="reviewTitle">Check Your Details</h2>
+    <p data-i18n="reviewText">Please make sure everything is correct before you submit.</p>
+    <dl class="summary" id="reviewSummary"></dl>
+    <p class="send-error" id="reviewError" role="alert" hidden></p>
+    <div class="modal-actions">
+      <button type="button" class="btn secondary" id="editBtn" data-i18n="edit">Edit Details</button>
+      <button type="button" class="btn" id="confirmBtn" data-i18n="confirmSend">Confirm and Submit</button>
+    </div>
+  </div>
+  <div id="sendingState" class="sending-state" role="status" hidden>
+    <div class="spinner" aria-hidden="true"></div>
+    <h2 data-i18n="sendingTitle">Sending your request…</h2>
+    <p data-i18n="sendingText">Please wait. Do not close this page.</p>
+  </div>
+</dialog>
+
 <script>
 /* ============================================================
    SETUP (1AV IT Innovation)
@@ -323,7 +374,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.1.2"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.2.0"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -347,7 +398,13 @@ const TEXT = {
     reasonHint: "Tell us briefly why you need a new password. Example: I forgot my password.",
     confirmLabel: "I confirm that this is my own account and the details above are correct.",
     submit: "Submit Request",
-    sending: "Sending…",
+    reviewTitle: "Check Your Details",
+    reviewText: "Please make sure everything is correct before you submit.",
+    edit: "Edit Details",
+    confirmSend: "Confirm and Submit",
+    tryAgain: "Try Again",
+    sendingTitle: "Sending your request…",
+    sendingText: "Please wait. Do not close this page.",
     once: "Please submit only once.",
     safety: "The IT Department will never ask for your current password. Do not share it with anyone.",
     doneTitle: "Request Submitted",
@@ -384,7 +441,13 @@ const TEXT = {
     reasonHint: "Sabihin nang maikli kung bakit kailangan mo ng bagong password. Halimbawa: Nakalimutan ko ang aking password.",
     confirmLabel: "Pinatutunayan ko na sa akin ang account na ito at tama ang mga detalye sa itaas.",
     submit: "Ipadala ang Kahilingan",
-    sending: "Ipinapadala…",
+    reviewTitle: "Suriin ang Iyong Detalye",
+    reviewText: "Siguraduhing tama ang lahat bago ipadala.",
+    edit: "Baguhin ang Detalye",
+    confirmSend: "Kumpirmahin at Ipadala",
+    tryAgain: "Subukan Muli",
+    sendingTitle: "Ipinapadala ang iyong kahilingan…",
+    sendingText: "Sandali lang. Huwag isara ang page na ito.",
     once: "Isang beses lamang ipadala.",
     safety: "Hindi kailanman hihingin ng IT Department ang kasalukuyan mong password. Huwag itong ibigay kahit kanino.",
     doneTitle: "Naipadala na ang Kahilingan",
@@ -414,6 +477,7 @@ const TEXT = {
   let lang = "fil";                     // default language; employees can switch to English
   let lastPayload = null;
   let sending = false;
+  let pending = null;                   // details waiting in the review dialog
   const t = (key) => TEXT[lang][key] || TEXT.en[key] || "";
 
   $("pageVersion").textContent = "v" + CONFIG.PAGE_VERSION;
@@ -485,26 +549,30 @@ const TEXT = {
     if (name !== "confirm") el.addEventListener("blur", () => { if (!pressingSubmit && el.value.trim()) validate(readValues(), name); });
   });
 
+  function fillRows(dl, v) {
+    const rows = [
+      [t("empLabel"), v.employeeNo],
+      [t("userLabel"), v.username],
+      [t("mobileLabel"), v.mobileNumber],
+      [t("emailLabel"), v.personalEmail],
+      [t("reasonLabel"), v.reason]
+    ];
+    dl.textContent = "";
+    rows.forEach(([k, val]) => {
+      const dt = document.createElement("dt"); dt.textContent = k;
+      const dd = document.createElement("dd"); dd.textContent = val;
+      dl.append(dt, dd);
+    });
+  }
+
   function renderSummary() {
+    if (pending) fillRows($("reviewSummary"), pending);
     if (!lastPayload) return;
     const ref = lastPayload.referenceNo || "";
     $("refNo").textContent = ref;
     $("refBox").hidden = !ref;
     $("refPending").hidden = !!ref;
-    const rows = [
-      [t("empLabel"), lastPayload.employeeNo],
-      [t("userLabel"), lastPayload.username],
-      [t("mobileLabel"), lastPayload.mobileNumber],
-      [t("emailLabel"), lastPayload.personalEmail],
-      [t("reasonLabel"), lastPayload.reason]
-    ];
-    const dl = $("summary");
-    dl.textContent = "";
-    rows.forEach(([k, v]) => {
-      const dt = document.createElement("dt"); dt.textContent = k;
-      const dd = document.createElement("dd"); dd.textContent = v;
-      dl.append(dt, dd);
-    });
+    fillRows($("summary"), lastPayload);
   }
 
   function applyLang(next) {
@@ -512,7 +580,6 @@ const TEXT = {
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
     document.querySelectorAll(".lang button").forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
-    if (sending) submitBtn.textContent = t("sending");
     if (!sendError.hidden) sendError.textContent = t("errSend");
     const values = readValues();
     Object.keys(rules).forEach((name) => { if (isInvalid(name)) validate(values, name); });
@@ -581,7 +648,18 @@ const TEXT = {
     window.scrollTo(0, 0);
   }
 
-  form.addEventListener("submit", async (e) => {
+  const dialog = $("reviewDialog");
+  const reviewError = $("reviewError");
+  const confirmBtn = $("confirmBtn");
+
+  function showModalState(isSending) {
+    $("reviewState").hidden = isSending;
+    $("sendingState").hidden = !isSending;
+  }
+  function closeDialog() { if (dialog.open) dialog.close(); }
+
+  // Step 1: Submit checks the fields, then shows the details for review. Nothing is sent yet.
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
     if (sending) return;
     sendError.hidden = true;
@@ -589,35 +667,63 @@ const TEXT = {
     const bad = validate(values);
     if (bad) { $(bad).focus(); return; }
 
+    pending = values;
+    fillRows($("reviewSummary"), pending);
+    reviewError.hidden = true;
+    confirmBtn.textContent = t("confirmSend");
+    showModalState(false);
+    if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open", "");
+    $("reviewTitle").focus();
+  });
+
+  // Edit Details: back to the form with everything still filled in.
+  $("editBtn").addEventListener("click", () => {
+    closeDialog();
+    pending = null;
+    $("employeeNo").focus();
+  });
+
+  // The Esc key closes the dialog, except while the request is being sent.
+  dialog.addEventListener("cancel", (e) => { if (sending) e.preventDefault(); else pending = null; });
+
+  // Step 2: Confirm and Submit sends the request and shows the sending animation.
+  confirmBtn.addEventListener("click", async () => {
+    if (sending || !pending) return;
     const payload = {
-      referenceNo: makeReference(values.employeeNo),
-      employeeNo: values.employeeNo,
-      username: values.username,
-      mobileNumber: values.mobileNumber,
-      personalEmail: values.personalEmail,
-      reason: values.reason,
+      referenceNo: makeReference(pending.employeeNo),
+      employeeNo: pending.employeeNo,
+      username: pending.username,
+      mobileNumber: pending.mobileNumber,
+      personalEmail: pending.personalEmail,
+      reason: pending.reason,
       language: lang,
       submittedAt: new Date().toISOString(),
       pageVersion: CONFIG.PAGE_VERSION
     };
 
     // Bots fill the hidden field. Show them the confirmation and send nothing.
-    if ($("companyWebsite").value) { showDone(payload); return; }
+    if ($("companyWebsite").value) { closeDialog(); pending = null; showDone(payload); return; }
 
     sending = true;
-    submitBtn.disabled = true;
-    submitBtn.textContent = t("sending");
+    reviewError.hidden = true;
+    showModalState(true);
+    const started = Date.now();
     try {
       const flowRef = await send(payload);
       if (flowRef) payload.referenceNo = flowRef;
+      // Keep the animation on screen for a moment so it does not just flash past.
+      const wait = 900 - (Date.now() - started);
+      if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+      closeDialog();
+      pending = null;
       showDone(payload);
     } catch (err) {
-      sendError.textContent = t("errSend");
-      sendError.hidden = false;
+      reviewError.textContent = t("errSend");
+      reviewError.hidden = false;
+      confirmBtn.textContent = t("tryAgain");
+      showModalState(false);
     } finally {
       sending = false;
-      submitBtn.disabled = false;
-      submitBtn.textContent = t("submit");
     }
   });
 
