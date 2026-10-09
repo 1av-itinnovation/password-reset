@@ -1,0 +1,56 @@
+name: Deploy to GitHub Pages
+
+# Publishes the site whenever main changes, or when started by hand from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Get the files
+        uses: actions/checkout@v4
+
+      - name: Insert the Power Automate URL from the secret
+        env:
+          FLOW_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+        run: |
+          if [ -z "$FLOW_URL" ]; then
+            echo "::error::The repository secret ALERT_WEBHOOK_URL is not set."
+            exit 1
+          fi
+          mkdir _site
+          python3 - <<'PY'
+          import os
+          html = open("index.html", encoding="utf-8").read()
+          if "__FLOW_URL__" not in html:
+              raise SystemExit("index.html has no __FLOW_URL__ placeholder")
+          html = html.replace("__FLOW_URL__", os.environ["FLOW_URL"].strip())
+          open("_site/index.html", "w", encoding="utf-8").write(html)
+          PY
+
+      - name: Prepare GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v4
