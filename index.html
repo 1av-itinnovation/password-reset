@@ -273,7 +273,7 @@
 
         <div class="field" data-field="reason">
           <label for="reason" data-i18n="reasonLabel">Reason for Request</label>
-          <span class="hint" id="reasonHint" data-i18n="reasonHint">Tell us briefly why you need a new password. Example: I forgot my password.</span>
+          <span class="hint" id="reasonHint" data-i18n="reasonHint">Tell us briefly why you need a new password. You may write in Tagalog or English. Example: I forgot my password.</span>
           <textarea id="reason" name="reason" maxlength="250" aria-describedby="reasonHint reasonErr"></textarea>
           <span class="error" id="reasonErr" hidden></span>
         </div>
@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.3.0"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.3.1"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -402,7 +402,7 @@ const TEXT = {
     emailLabel: "Personal Email Address",
     emailHint: "Not your company email. Example: juandelacruz@gmail.com",
     reasonLabel: "Reason for Request",
-    reasonHint: "Tell us briefly why you need a new password. Example: I forgot my password.",
+    reasonHint: "Tell us briefly why you need a new password. You may write in Tagalog or English. Example: I forgot my password.",
     confirmLabel: "I confirm that this is my own account and the details above are correct.",
     submit: "Submit Request",
     reviewTitle: "Check Your Details",
@@ -449,7 +449,7 @@ const TEXT = {
     emailLabel: "Personal na Email Address",
     emailHint: "Hindi ang email ng kumpanya. Halimbawa: juandelacruz@gmail.com",
     reasonLabel: "Dahilan ng Kahilingan",
-    reasonHint: "Sabihin nang maikli kung bakit kailangan mo ng bagong password. Halimbawa: Nakalimutan ko ang aking password.",
+    reasonHint: "Sabihin nang maikli kung bakit kailangan mo ng bagong password. Puwede kang sumulat sa Tagalog o English. Halimbawa: Nakalimutan ko ang aking password.",
     confirmLabel: "Pinatutunayan ko na sa akin ang account na ito at tama ang mga detalye sa itaas.",
     submit: "Ipadala ang Kahilingan",
     reviewTitle: "Suriin ang Iyong Detalye",
