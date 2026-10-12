@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.6.2"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.6.3"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -611,6 +611,19 @@ const TEXT = {
       }
       autofillBlocked[name] = false;
       typedValue[name] = el.value;
+    });
+  });
+
+  // Spaces typed before or after an entry are removed when the person leaves the field,
+  // so the box shows exactly what will be sent.
+  ["employeeNo", "username", "mobileNumber", "personalEmail", "confirmEmail", "reason"].forEach((name) => {
+    const el = $(name);
+    el.addEventListener("blur", () => {
+      const clean = el.value.trim();
+      if (clean !== el.value) {
+        el.value = clean;
+        if (name in typedValue) typedValue[name] = clean;
+      }
     });
   });
 
