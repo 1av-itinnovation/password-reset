@@ -310,12 +310,12 @@
     <section id="doneView" class="done" hidden aria-live="polite">
       <p class="preview-note" id="donePreviewNote" data-i18n="donePreview" hidden style="margin:0 0 20px;font-weight:600">Preview only. This request was NOT sent to the IT Department.</p>
       <div class="tick" aria-hidden="true"></div>
-      <h1 id="doneHeading" tabindex="-1" data-i18n="doneTitle">Request Submitted</h1>
-      <p data-i18n="doneP1">Your request has been sent to the 1AV IT Department. It is now in the queue for processing.</p>
-      <p data-i18n="doneP2">A temporary password will be sent to the mobile number you entered.</p>
+      <h1 id="doneHeading" tabindex="-1" data-i18n="doneTitle">Request Received</h1>
+      <p data-i18n="doneP1">We have received your password reset request.</p>
+      <p data-i18n="doneP2">You will receive an email with your ticket number once your request has been endorsed to the 1AV IT Department.</p>
       <div class="next">
         <p class="next-title" data-i18n="nextTitle">Next Step</p>
-        <p data-i18n="nextText">Once you receive the temporary password, go to the link below. Enter your username and the temporary password to set your new password.</p>
+        <p data-i18n="nextText">A temporary password will be sent to the mobile number you entered. Once you receive it, go to the link below. Enter your username and the temporary password to set your new password.</p>
         <a class="next-link" href="https://adssp.cebupacificair.com/" target="_blank" rel="noopener noreferrer">adssp.cebupacificair.com</a>
       </div>
       <p id="refPending" data-i18n="refPending" hidden>Your reference number will be sent to your personal email address.</p>
@@ -391,7 +391,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.7.1"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.8.0"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -424,10 +424,10 @@ const TEXT = {
     sendingText: "Please wait. Do not close this page.",
     once: "Please submit only once.",
     safety: "The IT Department will never ask for your current password. Do not share it with anyone.",
-    doneTitle: "Request Submitted",
-    doneP1: "Your request has been forwarded to the 1AV IT Department and is now under review.",
-    doneP2: "A temporary password will be sent to the mobile number you entered.",
-    nextText: "Once you receive the temporary password, go to the link below. Enter your username and the temporary password to set your new password.",
+    doneTitle: "Request Received",
+    doneP1: "We have received your password reset request.",
+    doneP2: "You will receive an email with your ticket number once your request has been endorsed to the 1AV IT Department.",
+    nextText: "A temporary password will be sent to the mobile number you entered. Once you receive it, go to the link below. Enter your username and the temporary password to set your new password.",
     nextTitle: "Next Step",
     refLabel: "Reference Number",
     refKeep: "Please keep this number.",
@@ -478,10 +478,10 @@ const TEXT = {
     sendingText: "Sandali lang. Huwag isara ang page na ito.",
     once: "Isang beses lang mag-submit.",
     safety: "Paalala: Huwag ilagay ang iyong password sa form. Huwag din itong ibigay sa IT Department o sa ibang departamento.",
-    doneTitle: "Naipadala na ang Request Mo",
-    doneP1: "Naipasa na ang request mo sa 1AV IT Department at ito ay nire-review na.",
-    doneP2: "Ipapadala ang temporary password sa mobile number na inilagay mo.",
-    nextText: "Kapag natanggap mo na ang temporary password, pumunta sa link sa ibaba. Ilagay ang username mo at ang temporary password para makagawa ng bagong password.",
+    doneTitle: "Natanggap na ang Request Mo",
+    doneP1: "Natanggap na namin ang request mo para sa password reset.",
+    doneP2: "Makakatanggap ka ng email na may ticket number kapag naipasa na ang request mo sa 1AV IT Department.",
+    nextText: "Ipapadala ang temporary password sa mobile number na inilagay mo. Kapag natanggap mo na, pumunta sa link sa ibaba. Ilagay ang username mo at ang temporary password para makagawa ng bagong password.",
     nextTitle: "Susunod na Gagawin",
     refLabel: "Reference Number",
     refKeep: "Itabi ang number na ito.",
