@@ -312,7 +312,7 @@
       <div class="tick" aria-hidden="true"></div>
       <h1 id="doneHeading" tabindex="-1" data-i18n="doneTitle">Request Received</h1>
       <p data-i18n="doneP1">We have received your password reset request.</p>
-      <p data-i18n="doneP2">You will receive an email with your ticket number once your request has been endorsed to the 1AV IT Department.</p>
+      <p data-i18n="doneP2">You will receive an email with your ticket number once your request has been endorsed to the 1AV IT Department. Requests are processed in the order they are received.</p>
       <div class="next">
         <p class="next-title" data-i18n="nextTitle">Next Step</p>
         <p data-i18n="nextText">A temporary password will be sent to the mobile number you entered. Once you receive it, go to the link below. Enter your username and the temporary password to set your new password.</p>
@@ -391,7 +391,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.8.0"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.8.1"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -426,7 +426,7 @@ const TEXT = {
     safety: "The IT Department will never ask for your current password. Do not share it with anyone.",
     doneTitle: "Request Received",
     doneP1: "We have received your password reset request.",
-    doneP2: "You will receive an email with your ticket number once your request has been endorsed to the 1AV IT Department.",
+    doneP2: "You will receive an email with your ticket number once your request has been endorsed to the 1AV IT Department. Requests are processed in the order they are received.",
     nextText: "A temporary password will be sent to the mobile number you entered. Once you receive it, go to the link below. Enter your username and the temporary password to set your new password.",
     nextTitle: "Next Step",
     refLabel: "Reference Number",
@@ -480,7 +480,7 @@ const TEXT = {
     safety: "Paalala: Huwag ilagay ang iyong password sa form. Huwag din itong ibigay sa IT Department o sa ibang departamento.",
     doneTitle: "Natanggap na ang Request Mo",
     doneP1: "Natanggap na namin ang request mo para sa password reset.",
-    doneP2: "Makakatanggap ka ng email na may ticket number kapag naipasa na ang request mo sa 1AV IT Department.",
+    doneP2: "Makakatanggap ka ng email na may ticket number kapag naipasa na ang request mo sa 1AV IT Department. Inaasikaso ang mga request ayon sa pagkakasunod-sunod ng pagdating.",
     nextText: "Ipapadala ang temporary password sa mobile number na inilagay mo. Kapag natanggap mo na, pumunta sa link sa ibaba. Ilagay ang username mo at ang temporary password para makagawa ng bagong password.",
     nextTitle: "Susunod na Gagawin",
     refLabel: "Reference Number",
