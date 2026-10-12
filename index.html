@@ -152,7 +152,6 @@
   .tick::after { content: ""; width: 13px; height: 25px; border: solid var(--white); border-width: 0 4px 4px 0; transform: translateY(-3px) rotate(45deg); }
   .done h1:focus { outline: none; }
   .done p { margin: 12px 0 0; }
-  .privacy { margin: 0; padding: 12px 14px; border: 1px solid var(--mist); border-radius: 8px; font-size: 0.85rem; line-height: 1.5; }
   .next { margin-top: 20px; padding: 16px 18px; border: 2px solid var(--blue); border-radius: 8px; }
   .next p { margin: 0; }
   .next .next-title { font-weight: 700; margin-bottom: 4px; }
@@ -284,8 +283,6 @@
           <span class="error" id="reasonErr" hidden></span>
         </div>
 
-        <p class="privacy" data-i18n="privacy">Data privacy: Your details will be used only to process this request, in line with the Data Privacy Act of 2012 (RA 10173).</p>
-
         <div class="field" data-field="confirm">
           <label class="check" for="confirm">
             <input type="checkbox" id="confirm" name="confirm" aria-describedby="confirmErr">
@@ -394,7 +391,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.7.0"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.7.1"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -430,7 +427,6 @@ const TEXT = {
     doneTitle: "Request Submitted",
     doneP1: "Your request has been forwarded to the 1AV IT Department and is now under review.",
     doneP2: "A temporary password will be sent to the mobile number you entered.",
-    privacy: "Data privacy: Your details will be used only to process this request, in line with the Data Privacy Act of 2012 (RA 10173).",
     nextText: "Once you receive the temporary password, go to the link below. Enter your username and the temporary password to set your new password.",
     nextTitle: "Next Step",
     refLabel: "Reference Number",
@@ -485,7 +481,6 @@ const TEXT = {
     doneTitle: "Naipadala na ang Request Mo",
     doneP1: "Naipasa na ang request mo sa 1AV IT Department at ito ay nire-review na.",
     doneP2: "Ipapadala ang temporary password sa mobile number na inilagay mo.",
-    privacy: "Data privacy: Ang iyong impormasyon ay gagamitin lamang para sa request na ito, ayon sa Data Privacy Act of 2012 (RA 10173).",
     nextText: "Kapag natanggap mo na ang temporary password, pumunta sa link sa ibaba. Ilagay ang username mo at ang temporary password para makagawa ng bagong password.",
     nextTitle: "Susunod na Gagawin",
     refLabel: "Reference Number",
