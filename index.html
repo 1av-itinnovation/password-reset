@@ -381,7 +381,7 @@ const CONFIG = {
   REASON_MIN: 5,
   TIMEOUT_MS: 20000,
   RETRY_WAITS_MS: [1500, 4000],    // waits before the 2nd and 3rd attempt
-  PAGE_VERSION: "1.6.3"            // shown in the footer and sent with every request
+  PAGE_VERSION: "1.6.4"            // shown in the footer and sent with every request
 };
 
 /* All wording on the page. Edit the text here; "en" is English, "fil" is Filipino. */
@@ -585,7 +585,8 @@ const TEXT = {
   submitBtn.addEventListener("pointerdown", () => { pressingSubmit = true; setTimeout(() => { pressingSubmit = false; }, 800); });
 
   // Typing only: pasting or dragging text into a field is blocked, with a message saying why.
-  ["employeeNo", "username", "mobileNumber", "personalEmail", "confirmEmail", "reason"].forEach((name) => {
+  // The Reason field is left open so a longer explanation can be pasted in.
+  ["employeeNo", "username", "mobileNumber", "personalEmail", "confirmEmail"].forEach((name) => {
     const el = $(name);
     const block = (e) => { e.preventDefault(); showError(name, "errPaste"); };
     el.addEventListener("paste", block);
